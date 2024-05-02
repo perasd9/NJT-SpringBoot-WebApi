@@ -1,5 +1,6 @@
 package com.NJT.WebApi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "sala")
 public class Sala {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -30,12 +32,20 @@ public class Sala {
     @Column(name = "naziv", nullable = false)
     private String naziv;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "tip_sale_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private TipSale tipSale;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "status_sale_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private StatusSale statusSale;
+
+    @Transient
+    private Long tipSaleId;
+
+    @Transient
+    private Long statusSaleId;
 
 }

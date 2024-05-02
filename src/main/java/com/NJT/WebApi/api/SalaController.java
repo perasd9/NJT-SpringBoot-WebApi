@@ -1,48 +1,52 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.NJT.WebApi.api;
 
 import com.NJT.WebApi.model.Sala;
-import com.NJT.WebApi.service.SalaService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
+import com.NJT.WebApi.service.interfaces.ISalaService;
 import java.util.List;
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *
+ * @author Pera
+ */
 @RestController
-@RequestMapping("/sala")
+@RequestMapping("api/v1/sala")
 public class SalaController {
-
-    SalaService salaService;
+    ISalaService salaService;
 
     @Autowired
-    public SalaController(SalaService salaService) {
+    public SalaController(ISalaService salaService) {
         this.salaService = salaService;
     }
-
-    @GetMapping("/")
-    public List<Sala> getAllSala() {
-        return salaService.getAllSala();
+    
+    @GetMapping
+    public List<Sala> getAll(){
+        return salaService.getAll();
     }
-
-    @GetMapping("/{id}")
-    public Optional<Sala> getSalaById(@PathVariable String id) {
-        return salaService.getSala(Long.valueOf(id));
+    
+    @PostMapping
+    public void save(@RequestBody Sala sala){
+        salaService.save(sala);
     }
-
-    @PostMapping("/")
-    public Sala createSala(@RequestBody Sala sala) {
-        return salaService.saveSala(sala);
+    
+    @PutMapping
+    public void update(@RequestBody Sala sala){
+        salaService.update(sala);
     }
-
-    @DeleteMapping("/")
-    public void deleteSala(@RequestBody Sala sala) {
-        salaService.deleteSala(sala);
+    
+    @DeleteMapping
+    public void delete(@RequestBody Long id){
+        salaService.delete(id);
     }
-
-    @PutMapping("/")
-    public Sala updateSala(@RequestBody Sala sala) {
-        return salaService.updateSala(sala);
-    }
-
-
 }
