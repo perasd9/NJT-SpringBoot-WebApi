@@ -4,7 +4,8 @@
  */
 package com.NJT.WebApi.repository;
 
-import com.NJT.WebApi.repository.interfaces.ITipSaleRepository;
+import com.NJT.WebApi.model.TipSale;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,6 +13,6 @@ import org.springframework.stereotype.Repository;
  * @author Pera
  */
 @Repository
-public interface TipSaleRepository extends ITipSaleRepository{
+public interface TipSaleRepository extends CrudRepository<TipSale, Long>{
     
 }

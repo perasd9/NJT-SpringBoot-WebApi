@@ -5,7 +5,7 @@
 package com.NJT.WebApi.service;
 
 import com.NJT.WebApi.model.Sala;
-import com.NJT.WebApi.repository.interfaces.ISalaRepository;
+import com.NJT.WebApi.repository.SalaRepository;
 import com.NJT.WebApi.service.interfaces.ISalaService;
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SalaService implements ISalaService{
-    ISalaRepository salaRepository;
+    SalaRepository salaRepository;
 
     @Autowired
-    public SalaService(ISalaRepository salaRepository) {
+    public SalaService(SalaRepository salaRepository) {
         this.salaRepository = salaRepository;
     }
     

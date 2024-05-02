@@ -5,7 +5,7 @@
 package com.NJT.WebApi.service;
 
 import com.NJT.WebApi.model.StatusRezervacije;
-import com.NJT.WebApi.repository.interfaces.IStatusRezervacijeRepository;
+import com.NJT.WebApi.repository.StatusRezervacijeRepository;
 import com.NJT.WebApi.service.interfaces.IStatusRezervacijeService;
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class StatusRezervacijeService implements IStatusRezervacijeService{
-    IStatusRezervacijeRepository statusRezervacijeRepository;
+    StatusRezervacijeRepository statusRezervacijeRepository;
 
     @Autowired
-    public StatusRezervacijeService(IStatusRezervacijeRepository statusRezervacijeRepository) {
+    public StatusRezervacijeService(StatusRezervacijeRepository statusRezervacijeRepository) {
         this.statusRezervacijeRepository = statusRezervacijeRepository;
     }
     

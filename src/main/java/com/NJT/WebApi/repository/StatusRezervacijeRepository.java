@@ -4,7 +4,8 @@
  */
 package com.NJT.WebApi.repository;
 
-import com.NJT.WebApi.repository.interfaces.IStatusRezervacijeRepository;
+import com.NJT.WebApi.model.StatusRezervacije;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
  * @author Pera
  */
 @Repository
-public interface StatusRezervacijeRepository extends IStatusRezervacijeRepository{
+public interface StatusRezervacijeRepository extends CrudRepository<StatusRezervacije, Long>{
     
 }
+
