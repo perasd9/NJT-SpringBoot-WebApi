@@ -1,17 +1,19 @@
-package com.NJT.WebApi.model;
+package com.NJT.WebApi.model.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "user")
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance
 @DiscriminatorColumn(name="user_type")
-public abstract class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

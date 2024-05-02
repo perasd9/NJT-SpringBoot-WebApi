@@ -1,5 +1,6 @@
 package com.NJT.WebApi.model;
 
+import com.NJT.WebApi.model.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

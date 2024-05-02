@@ -1,4 +1,4 @@
-package com.NJT.WebApi.model;
+package com.NJT.WebApi.model.user;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,12 +7,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "student")
 @DiscriminatorValue("student")
 public class Student extends User{
 
     @Column(name = "svrha", nullable = false)
     private String svrha;
+
+    public Student() {
+
+    }
 
     public Student(String svrha, String username, String password, String email, String imePrezime) {
         this.svrha = svrha;
@@ -22,7 +25,5 @@ public class Student extends User{
         this.setImePrezime(imePrezime);
     }
 
-    public Student() {
 
-    }
 }
