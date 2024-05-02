@@ -1,12 +1,16 @@
 package com.NJT.WebApi.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "tip_sale")
 public class TipSale {
     @Id
@@ -16,5 +20,6 @@ public class TipSale {
 
     @Column(name = "naziv", nullable = false)
     private String naziv;
+
 
 }

@@ -2,6 +2,7 @@ package com.NJT.WebApi.model;
 
 import com.NJT.WebApi.model.user.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "rezervacija")
+@AllArgsConstructor
 public class Rezervacija {
 
     @Id
@@ -33,4 +35,7 @@ public class Rezervacija {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public Rezervacija() {
+
+    }
 }
