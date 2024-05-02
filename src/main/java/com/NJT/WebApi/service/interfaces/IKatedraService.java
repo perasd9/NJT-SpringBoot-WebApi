@@ -2,16 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package com.NJT.WebApi.repository;
+package com.NJT.WebApi.service.interfaces;
 
-import com.NJT.WebApi.repository.interfaces.IRezervacijaRepository;
-import org.springframework.stereotype.Repository;
+import com.NJT.WebApi.model.Katedra;
 
 /**
  *
  * @author Pera
  */
-@Repository
-public interface RezervacijaRepository extends IRezervacijaRepository{
+public interface IKatedraService extends IService<Katedra>{
     
 }

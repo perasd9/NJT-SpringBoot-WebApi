@@ -4,7 +4,7 @@
  */
 package com.NJT.WebApi.repository;
 
-import com.NJT.WebApi.repository.interfaces.IRezervacijaRepository;
+import com.NJT.WebApi.repository.interfaces.ISalaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
  * @author Pera
  */
 @Repository
-public interface RezervacijaRepository extends IRezervacijaRepository{
+public interface SalaRepository extends ISalaRepository{
     
 }
