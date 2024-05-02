@@ -5,7 +5,7 @@
 package com.NJT.WebApi.service;
 
 import com.NJT.WebApi.model.StatusSale;
-import com.NJT.WebApi.repository.interfaces.IStatusSaleRepository;
+import com.NJT.WebApi.repository.StatusSaleRepository;
 import com.NJT.WebApi.service.interfaces.IStatusSaleService;
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class StatusSaleService implements IStatusSaleService{
-    IStatusSaleRepository statusSaleRepository;
+    StatusSaleRepository statusSaleRepository;
 
     @Autowired
-    public StatusSaleService(IStatusSaleRepository statusSaleRepository) {
+    public StatusSaleService(StatusSaleRepository statusSaleRepository) {
         this.statusSaleRepository = statusSaleRepository;
     }
     

@@ -5,7 +5,7 @@
 package com.NJT.WebApi.service;
 
 import com.NJT.WebApi.model.TipSale;
-import com.NJT.WebApi.repository.interfaces.ITipSaleRepository;
+import com.NJT.WebApi.repository.TipSaleRepository;
 import com.NJT.WebApi.service.interfaces.ITipSaleService;
 import java.util.List;
 import java.util.Optional;
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TipSaleService implements ITipSaleService{
-    ITipSaleRepository tipSaleRepository;
+    TipSaleRepository tipSaleRepository;
 
     @Autowired
-    public TipSaleService(ITipSaleRepository tipSaleRepository) {
+    public TipSaleService(TipSaleRepository tipSaleRepository) {
         this.tipSaleRepository = tipSaleRepository;
     }
 

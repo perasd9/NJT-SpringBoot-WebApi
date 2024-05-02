@@ -5,7 +5,7 @@
 package com.NJT.WebApi.service;
 
 import com.NJT.WebApi.model.Katedra;
-import com.NJT.WebApi.repository.interfaces.IKatedraRepository;
+import com.NJT.WebApi.repository.KatedraRepository;
 import com.NJT.WebApi.service.interfaces.IKatedraService;
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class KatedraService implements IKatedraService {
 
-    IKatedraRepository katedraRepository;
+    KatedraRepository katedraRepository;
 
     @Autowired
-    public KatedraService(IKatedraRepository katedraRepository) {
+    public KatedraService(KatedraRepository katedraRepository) {
         this.katedraRepository = katedraRepository;
     }
 
