@@ -2,17 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package com.NJT.WebApi.repository;
+package com.NJT.WebApi.service.interfaces;
 
 import com.NJT.WebApi.model.Sala;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author Pera
  */
-@Repository
-public interface SalaRepository extends CrudRepository<Sala, Long>{
+public interface ISalaService extends IService<Sala>{
     
 }
