@@ -5,9 +5,13 @@
 package com.NJT.WebApi.service;
 
 import com.NJT.WebApi.model.Rezervacija;
+import com.NJT.WebApi.repository.RezervacijaRepository;
 import com.NJT.WebApi.service.interfaces.IRezervacijaService;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,10 +21,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class RezervacijaService implements IRezervacijaService{
 
-    //NOT IMPLEMENTED YET
+    private RezervacijaRepository repository;
+
+    @Autowired
+    public RezervacijaService(RezervacijaRepository repository) {
+        this.repository = repository;
+    }
+
+
     @Override
     public List<Rezervacija> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        return  (List<Rezervacija>)  repository.findAll();
     }
 
     //NOT IMPLEMENTED YET
@@ -29,10 +40,14 @@ public class RezervacijaService implements IRezervacijaService{
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 
-    //NOT IMPLEMENTED YET
+
     @Override
-    public boolean save(Rezervacija entity) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    public boolean save(Rezervacija rezervacija) {
+
+        repository.save(rezervacija);
+
+        return true;
+
     }
 
     //NOT IMPLEMENTED YET

@@ -9,13 +9,14 @@ import com.NJT.WebApi.service.RezervacijaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
  * @author Pera
  */
-@Controller
+@RestController
+@RequestMapping("api/v1/rezervacija")
 public class RezervacijaController {
     
     RezervacijaService rezervacijaService;
@@ -29,5 +30,9 @@ public class RezervacijaController {
     public List<Rezervacija> getAllReservations(){
         return rezervacijaService.getAll();
     }
-    
+
+    @PostMapping
+    public void addReservation(@RequestBody Rezervacija rezervacija) {
+        rezervacijaService.save(rezervacija);
+    }
 }

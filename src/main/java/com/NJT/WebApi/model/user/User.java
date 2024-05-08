@@ -32,4 +32,8 @@ public abstract class User implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Transient
+    @Column(name = "odobren", nullable = false)
+    private Boolean odobren = false;
+
 }

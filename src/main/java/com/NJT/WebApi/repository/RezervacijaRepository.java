@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  *
  * @author Pera
  */
-@Repository
+
 public interface RezervacijaRepository extends CrudRepository<Rezervacija, Long>{
     
 }

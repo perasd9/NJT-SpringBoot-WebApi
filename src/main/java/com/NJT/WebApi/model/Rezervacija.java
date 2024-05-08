@@ -13,10 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "rezervacija")
-@AllArgsConstructor
 public class Rezervacija {
 
     @Id
