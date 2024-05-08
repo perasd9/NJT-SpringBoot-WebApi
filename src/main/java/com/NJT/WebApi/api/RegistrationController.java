@@ -2,6 +2,7 @@ package com.NJT.WebApi.api;
 
 import com.NJT.WebApi.exception.UserNameExistsException;
 import com.NJT.WebApi.model.user.Student;
+import com.NJT.WebApi.model.user.User;
 import com.NJT.WebApi.model.user.ZaposleniUNastavi;
 import com.NJT.WebApi.model.user.ZaposleniVanNastave;
 import com.NJT.WebApi.service.UserService;
@@ -35,13 +36,41 @@ public class RegistrationController {
 
     @PostMapping("/zaposleniUNastavi")
     public void registrujZaposlenogUNastavi(@RequestBody ZaposleniUNastavi zaposleni){
-        userService.registruj(zaposleni);
+        try {
+            userService.registruj(zaposleni);
+        } catch (UserNameExistsException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @PostMapping("/student")
     public void registrujStudenta(@RequestBody Student student){
-        userService.registruj(student);
+        try {
+            userService.registruj(student);
+        } catch (UserNameExistsException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    @PostMapping
+    public ResponseEntity registerUser(@RequestBody User user) {
+        try {
+            if (user instanceof ZaposleniVanNastave) {
+                userService.registruj((ZaposleniVanNastave) user);
+            } else if (user instanceof ZaposleniUNastavi) {
+                userService.registruj((ZaposleniUNastavi) user);
+            } else if (user instanceof Student) {
+                userService.registruj((Student) user);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user type");
+            }
+
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (UserNameExistsException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
+        }
+    }
+
 
 
 }

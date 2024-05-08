@@ -6,11 +6,13 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @DiscriminatorValue("zaposleni_van_nastave")
-public class ZaposleniVanNastave extends User{
+public class ZaposleniVanNastave extends User  {
     @Column(name = "titula", nullable = false)
     private String titula;
 }

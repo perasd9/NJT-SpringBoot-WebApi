@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @DiscriminatorValue("zaposleni_u_nastavi")
-public class ZaposleniUNastavi extends User{
+public class ZaposleniUNastavi extends User {
     @Column(name = "zvanje", nullable = false)
     private String zvanje;
 

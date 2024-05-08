@@ -1,5 +1,7 @@
 package com.NJT.WebApi.model.user;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
@@ -13,7 +15,12 @@ import java.io.Serializable;
 @Table(name = "user")
 @Inheritance
 @DiscriminatorColumn(name="user_type")
-public abstract class User implements Serializable {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ZaposleniVanNastave.class, name = "ZaposleniVanNastave"),
+        @JsonSubTypes.Type(value = ZaposleniUNastavi.class, name = "ZaposleniUNastavi"),
+        @JsonSubTypes.Type(value = Student.class, name = "Student")})
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -32,8 +39,10 @@ public abstract class User implements Serializable {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Transient
     @Column(name = "odobren", nullable = false)
     private Boolean odobren = false;
+
+    @Transient
+    String type;
 
 }

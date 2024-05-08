@@ -35,12 +35,19 @@ public class UserService {
         zaposleniVanNastaveRepository.save(zaposleni);
     }
 
-    public void registruj(ZaposleniUNastavi zaposleni){
+    public void registruj(ZaposleniUNastavi zaposleni) throws UserNameExistsException {
 
+        if(zaposleniVanNastaveRepository.findByUsername(zaposleni.getUsername()).isPresent()){
+            throw new UserNameExistsException();
+        }
+        zaposleniUNastaviRepository.save(zaposleni);
     }
 
-    public void registruj(Student student){
-
+    public void registruj(Student student) throws UserNameExistsException {
+        if(zaposleniVanNastaveRepository.findByUsername(student.getUsername()).isPresent()){
+            throw new UserNameExistsException();
+        }
+        studentRepository.save(student);
     }
 
 }
