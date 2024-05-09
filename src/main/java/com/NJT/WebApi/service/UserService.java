@@ -2,7 +2,6 @@ package com.NJT.WebApi.service;
 
 import com.NJT.WebApi.exception.UserNameExistsException;
 import com.NJT.WebApi.model.user.Student;
-import com.NJT.WebApi.model.user.User;
 import com.NJT.WebApi.model.user.ZaposleniUNastavi;
 import com.NJT.WebApi.model.user.ZaposleniVanNastave;
 import com.NJT.WebApi.repository.StudentRepository;
@@ -20,10 +19,10 @@ public class UserService {
 
     @Autowired
     public UserService(
-            StudentRepository userRepository,
+            StudentRepository studentRepository,
             ZaposleniVanNastaveRepository zaposleniVanNastaveRepository,
             ZaposleniUNastaviRepository zaposleniUNastaviRepository) {
-        this.studentRepository = userRepository;
+        this.studentRepository = studentRepository;
         this.zaposleniVanNastaveRepository=zaposleniVanNastaveRepository;
         this.zaposleniUNastaviRepository=zaposleniUNastaviRepository;
     }
@@ -37,14 +36,14 @@ public class UserService {
 
     public void registruj(ZaposleniUNastavi zaposleni) throws UserNameExistsException {
 
-        if(zaposleniVanNastaveRepository.findByUsername(zaposleni.getUsername()).isPresent()){
+        if(zaposleniUNastaviRepository.findByUsername(zaposleni.getUsername()).isPresent()){
             throw new UserNameExistsException();
         }
         zaposleniUNastaviRepository.save(zaposleni);
     }
 
     public void registruj(Student student) throws UserNameExistsException {
-        if(zaposleniVanNastaveRepository.findByUsername(student.getUsername()).isPresent()){
+        if(studentRepository.findByUsername(student.getUsername()).isPresent()){
             throw new UserNameExistsException();
         }
         studentRepository.save(student);

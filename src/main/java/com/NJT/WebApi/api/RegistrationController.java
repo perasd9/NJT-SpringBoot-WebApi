@@ -24,37 +24,10 @@ public class RegistrationController {
         this.user = user;
     }
 
-    @PostMapping("/zaposleniVanNastavi")
-    public ResponseEntity registrujZaposlenogVanNastavi(@RequestBody ZaposleniVanNastave zaposleni){
-        try {
-            userService.registruj(zaposleni);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (UserNameExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
-        }
-    }
-
-    @PostMapping("/zaposleniUNastavi")
-    public void registrujZaposlenogUNastavi(@RequestBody ZaposleniUNastavi zaposleni){
-        try {
-            userService.registruj(zaposleni);
-        } catch (UserNameExistsException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PostMapping("/student")
-    public void registrujStudenta(@RequestBody Student student){
-        try {
-            userService.registruj(student);
-        } catch (UserNameExistsException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @PostMapping
     public ResponseEntity registerUser(@RequestBody User user) {
         try {
+
             if (user instanceof ZaposleniVanNastave) {
                 userService.registruj((ZaposleniVanNastave) user);
             } else if (user instanceof ZaposleniUNastavi) {
@@ -69,6 +42,7 @@ public class RegistrationController {
         } catch (UserNameExistsException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
         }
+
     }
 
 

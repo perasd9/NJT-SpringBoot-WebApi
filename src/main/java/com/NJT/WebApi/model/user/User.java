@@ -42,6 +42,9 @@ public class User implements Serializable {
     @Column(name = "odobren", nullable = false)
     private Boolean odobren = false;
 
+    @Column(name = "potvrdjen_mail", nullable = false)
+    private Boolean potvrdjenMail = false;
+
     @Transient
     String type;
 

@@ -17,10 +17,4 @@ public class UserController {
         this.userService = userService;
     }
 
-    //not implemented
-    @PostMapping("/add/zaposlenivannastave")
-    public void addZaposleniVANNastave(@RequestBody ZaposleniVanNastave zaposleniVanNastave) {
-
-    }
-
 }
