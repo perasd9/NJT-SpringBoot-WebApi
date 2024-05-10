@@ -1,4 +1,4 @@
-package com.NJT.WebApi.exception;
+package com.NJT.WebApi.model.exception;
 
 public class RegistrationException extends Exception{
 

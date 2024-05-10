@@ -1,6 +1,6 @@
 package com.NJT.WebApi.service;
 
-import com.NJT.WebApi.exception.EmailFailureException;
+import com.NJT.WebApi.model.exception.EmailFailureException;
 import com.NJT.WebApi.model.VerificationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +34,7 @@ public class EmailService {
     public void sendVerificationEmail(VerificationToken verificationToken) throws EmailFailureException {
         SimpleMailMessage message = makeMailMessage();
         message.setTo(verificationToken.getUser().getEmail());
-        message.setSubject("verifiuj mail da verifikujes nalog");
+        message.setSubject("Verifikuj mail adresu za nalog.");
         message.setText("Klikni link ispod da verifikujes nalog\n" +
                 frontendUrl+ "/auth/verify?token=" + verificationToken.getToken());
         try{

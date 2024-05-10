@@ -1,5 +1,6 @@
 package com.NJT.WebApi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,9 +44,11 @@ public class Sala {
     private StatusSale statusSale;
 
     @Transient
+    @JsonIgnore
     private Long tipSaleId;
 
     @Transient
+    @JsonIgnore
     private Long statusSaleId;
 
 }

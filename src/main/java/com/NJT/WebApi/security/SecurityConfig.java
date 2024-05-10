@@ -1,5 +1,6 @@
 package com.NJT.WebApi.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -10,11 +11,21 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 @Configuration
 public class SecurityConfig {
+
+    JWTRequestFilter jwtRequestFilter;
+
+    @Autowired
+    public SecurityConfig(JWTRequestFilter jwtRequestFilter) {
+        this.jwtRequestFilter = jwtRequestFilter;
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().permitAll());
+                .requestMatchers("/api/v1/auth/**").permitAll()
+                .anyRequest().authenticated());
+        http.addFilterBefore(jwtRequestFilter, AuthorizationFilter.class);
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
 

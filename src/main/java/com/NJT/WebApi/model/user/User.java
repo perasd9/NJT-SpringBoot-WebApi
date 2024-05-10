@@ -1,5 +1,6 @@
 package com.NJT.WebApi.model.user;
 
+import com.NJT.WebApi.model.VerificationToken;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
@@ -8,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -47,5 +50,8 @@ public class User implements Serializable {
 
     @Transient
     String type;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VerificationToken> verificationTokens = new ArrayList<>();
 
 }
