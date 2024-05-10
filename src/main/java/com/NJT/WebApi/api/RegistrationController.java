@@ -1,10 +1,7 @@
 package com.NJT.WebApi.api;
 
-import com.NJT.WebApi.exception.UserNameExistsException;
-import com.NJT.WebApi.model.user.Student;
+import com.NJT.WebApi.exception.RegistrationException;
 import com.NJT.WebApi.model.user.User;
-import com.NJT.WebApi.model.user.ZaposleniUNastavi;
-import com.NJT.WebApi.model.user.ZaposleniVanNastave;
 import com.NJT.WebApi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,22 +23,14 @@ public class RegistrationController {
 
     @PostMapping
     public ResponseEntity registerUser(@RequestBody User user) {
+
         try {
-
-            if (user instanceof ZaposleniVanNastave) {
-                userService.registruj((ZaposleniVanNastave) user);
-            } else if (user instanceof ZaposleniUNastavi) {
-                userService.registruj((ZaposleniUNastavi) user);
-            } else if (user instanceof Student) {
-                userService.registruj((Student) user);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user type");
-            }
-
+            userService.registerUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (UserNameExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
+        } catch (RegistrationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+
 
     }
 
