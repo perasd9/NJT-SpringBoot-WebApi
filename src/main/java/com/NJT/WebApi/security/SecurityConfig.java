@@ -27,7 +27,6 @@ public class SecurityConfig {
                 .anyRequest().authenticated());
         http.addFilterBefore(jwtRequestFilter, AuthorizationFilter.class);
         http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(AbstractHttpConfigurer::disable);
 
         return http.build();
     }

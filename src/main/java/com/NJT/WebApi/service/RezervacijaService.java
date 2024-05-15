@@ -7,6 +7,8 @@ package com.NJT.WebApi.service;
 import com.NJT.WebApi.model.Rezervacija;
 import com.NJT.WebApi.repository.RezervacijaRepository;
 import com.NJT.WebApi.service.interfaces.IRezervacijaService;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
  * @author Pera
  */
 @Service
-public class RezervacijaService implements IRezervacijaService{
+public class RezervacijaService implements IRezervacijaService {
 
     private RezervacijaRepository repository;
 
@@ -28,38 +30,41 @@ public class RezervacijaService implements IRezervacijaService{
         this.repository = repository;
     }
 
-
     @Override
     public List<Rezervacija> getAll() {
-        return  (List<Rezervacija>)  repository.findAll();
+        return (List<Rezervacija>) repository.findAll();
+    }
+
+    @Override
+    public List<Rezervacija> getAllByDate(LocalDateTime date) {
+        return (List<Rezervacija>) repository.findByVremeDatum(date);
     }
 
     //NOT IMPLEMENTED YET
     @Override
     public Optional<Rezervacija> getById(Object id) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-
 
     @Override
     public boolean save(Rezervacija rezervacija) {
 
-        repository.save(rezervacija);
+        Rezervacija r = repository.save(rezervacija);
 
-        return true;
+        return r != null;
 
     }
 
     //NOT IMPLEMENTED YET
     @Override
     public boolean update(Rezervacija entity) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     //NOT IMPLEMENTED YET
     @Override
     public boolean delete(Object id) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
 }

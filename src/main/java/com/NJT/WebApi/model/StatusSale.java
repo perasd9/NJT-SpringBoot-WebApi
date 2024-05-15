@@ -19,6 +19,6 @@ public class StatusSale {
     private Long id;
 
     @Column(name = "status", nullable = false)
-    private Integer status;
+    private String status;
 
 }

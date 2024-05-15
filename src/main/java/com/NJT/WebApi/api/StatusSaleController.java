@@ -8,6 +8,7 @@ import com.NJT.WebApi.model.StatusSale;
 import com.NJT.WebApi.service.interfaces.IStatusSaleService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,9 @@ public class StatusSaleController {
     }
     
     @GetMapping
-    public List<StatusSale> getAll(){
-        return statusSaleService.getAll();
+    public ResponseEntity<List<StatusSale>> getAll(){
+        List<StatusSale> lista = statusSaleService.getAll();
+        
+        return ResponseEntity.ok(lista);
     }
 }
