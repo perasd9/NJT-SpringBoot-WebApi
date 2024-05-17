@@ -49,11 +49,10 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginBody loginBody){
-        String jwt = null;
+        LoginResponse response = null;
         try {
-            jwt = userService.loginUser(loginBody);
+            response = userService.loginUser(loginBody);
         } catch (LoginException e) {
-            LoginResponse response = new LoginResponse();
             response.setSuccess(false);
             response.setFailureReason(e.getMsg());
 
@@ -62,13 +61,11 @@ public class AuthenticationController {
         } catch (EmailFailureException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        if(jwt==null){
+        if(response==null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }else{
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setJwt(jwt);
-            loginResponse.setSuccess(true);
-            return ResponseEntity.ok(loginResponse);
+            response.setSuccess(true);
+            return ResponseEntity.ok(response);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.NJT.WebApi.model.user;
 
 import com.NJT.WebApi.model.VerificationToken;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
@@ -40,18 +41,23 @@ public class User implements Serializable {
     private String imePrezime;
 
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(name = "odobren", nullable = false)
+    @JsonIgnore
     private Boolean odobren = false;
 
     @Column(name = "potvrdjen_mail", nullable = false)
+    @JsonIgnore
     private Boolean potvrdjenMail = false;
 
     @Transient
+    @JsonIgnore
     String type;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<VerificationToken> verificationTokens = new ArrayList<>();
 
 }

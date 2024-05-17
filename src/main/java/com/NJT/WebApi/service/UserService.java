@@ -1,5 +1,6 @@
 package com.NJT.WebApi.service;
 
+import com.NJT.WebApi.model.auth.LoginResponse;
 import com.NJT.WebApi.model.exception.EmailFailureException;
 import com.NJT.WebApi.model.exception.RegistrationException;
 import com.NJT.WebApi.model.exception.LoginException;
@@ -101,15 +102,20 @@ public class UserService {
         return false;
     }
 
-    public String loginUser(LoginBody loginBody) throws LoginException, EmailFailureException {
+    public LoginResponse loginUser(LoginBody loginBody) throws LoginException, EmailFailureException {
 
         Optional<User> opUser = userRepository.findByUsername(loginBody.getUsername());
+        LoginResponse loginResponse;
         if(opUser.isPresent()){
             User user = opUser.get();
             if(encryptionService.checkPassword(loginBody.getPassword(), user.getPassword())){
                 if(user.getPotvrdjenMail()){
                     if(user.getOdobren()){
-                        return jwtService.createToken(user);
+                        //return jwtService.createToken(user); //stari kod, ne radimo ovako vise
+                        loginResponse  = new LoginResponse();
+                        loginResponse.setUser(user);
+                        loginResponse.setJwt(jwtService.createToken(user));
+                        return loginResponse;
                     }else {
                         throw new LoginException("Profil jos uvek nije odobren!");
                     }
