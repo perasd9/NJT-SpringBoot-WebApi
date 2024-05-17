@@ -1,12 +1,14 @@
 package com.NJT.WebApi.model;
 
 import com.NJT.WebApi.model.user.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +24,7 @@ public class Rezervacija {
     private Long id;
 
     @Column(name = "vreme_datum", nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime vremeDatum;
 
     @ManyToOne(optional = false)

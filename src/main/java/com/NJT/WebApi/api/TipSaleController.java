@@ -8,6 +8,7 @@ import com.NJT.WebApi.model.TipSale;
 import com.NJT.WebApi.service.interfaces.ITipSaleService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +28,10 @@ public class TipSaleController {
     }
     
     @GetMapping
-    public List<TipSale> getAll(){
-        return tipSaleService.getAll();
+    public ResponseEntity<List<TipSale>> getAll(){
+        List<TipSale> lista = tipSaleService.getAll();
+        
+        return ResponseEntity.ok(lista);
     }
     
 }
