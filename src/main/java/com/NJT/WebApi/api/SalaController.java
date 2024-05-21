@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("api/v1/sala")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class SalaController {
 
     ISalaService salaService;
@@ -42,18 +42,36 @@ public class SalaController {
         return ResponseEntity.ok(lista);
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<Sala>> getAllActive() {
+        List<Sala> lista = salaService.getAllActive();
+
+        return ResponseEntity.ok(lista);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/search")
+    public ResponseEntity<List<Sala>> getAllByName(@RequestParam("naziv") String naziv) {
+        List<Sala> lista = salaService.getAllByName(naziv);
+
+        return ResponseEntity.ok(lista);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity save(@RequestBody Sala sala) {
         return salaService.save(sala) ? (ResponseEntity) ResponseEntity.ok().build()
                 : (ResponseEntity) ResponseEntity.badRequest().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping
     public ResponseEntity update(@RequestBody Sala sala) {
         return salaService.update(sala) ? (ResponseEntity) ResponseEntity.ok().build()
                 : (ResponseEntity) ResponseEntity.badRequest().build();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping
     public ResponseEntity delete(@RequestBody Long id) {
         salaService.delete(id);

@@ -10,7 +10,7 @@ import lombok.Setter;
 @DiscriminatorValue("student")
 public class Student extends User{
 
-    @Column(name = "svrha", nullable = false)
+    @Column(name = "svrha", nullable = true)
     private String svrha;
 
     public Student() {

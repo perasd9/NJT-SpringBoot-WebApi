@@ -40,6 +40,16 @@ public class SalaService implements ISalaService {
     }
 
     @Override
+    public List<Sala> getAllActive() {
+        return (List<Sala>) salaRepository.findAllByStatus("Aktivna");
+    }
+
+    @Override
+    public List<Sala> getAllByName(String naziv) {
+        return (List<Sala>) salaRepository.findAllByNaziv(naziv);
+    }
+
+    @Override
     public Optional<Sala> getById(Object id) {
         return salaRepository.findById(Long.valueOf(id.toString()));
     }
@@ -61,7 +71,7 @@ public class SalaService implements ISalaService {
             sala.setBrojMesta(entity.getBrojMesta());
             sala.setBrojRacunara(entity.getBrojRacunara());
             sala.setNapomena(entity.getNapomena());
-            
+
             if (entity.getTipSale().getId() != null) {
                 Optional<TipSale> optionalTipSale = tipSaleRepository.findById(entity.getTipSale().getId());
                 optionalTipSale.ifPresent(sala::setTipSale);
@@ -81,9 +91,21 @@ public class SalaService implements ISalaService {
 
     @Override
     public boolean delete(Object id) {
-        salaRepository.deleteById(Long.valueOf(id.toString()));
+        //salaRepository.deleteById(Long.valueOf(id.toString()));
 
-        return true;
+        Optional<Sala> s = salaRepository.findById(Long.valueOf(id.toString()));
+
+        if (s.isPresent()) {
+            Sala sala = s.get();
+            
+            sala.setStatusSale(statusSaleRepository.findBystatus("Neaktivna"));
+
+            salaRepository.save(sala);
+            return true;
+        }
+
+        return false;
+
     }
 
 }

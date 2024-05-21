@@ -21,7 +21,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RezervacijaRepository extends CrudRepository<Rezervacija, Long> {
 
-@Query("SELECT r FROM Rezervacija r WHERE YEAR(r.vremeDatum) = YEAR(:date) AND MONTH(r.vremeDatum) "
-        + "= MONTH(:date) AND DAY(r.vremeDatum) = DAY(:date)")
+    @Query("SELECT r FROM Rezervacija r WHERE YEAR(r.vremeDatum) = YEAR(:date) AND MONTH(r.vremeDatum) "
+            + "= MONTH(:date) AND DAY(r.vremeDatum) = DAY(:date) AND r.statusRezervacije.status = 'Odobrena'")
     public List<Rezervacija> findByVremeDatum(@Param("date") LocalDateTime date);
+
+    @Query("SELECT r FROM Rezervacija r WHERE r.statusRezervacije.status = :status")
+    public List<Rezervacija> findByStatusRezervacije(@Param("status") String status);
 }

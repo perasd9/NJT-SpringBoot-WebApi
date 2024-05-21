@@ -13,6 +13,6 @@ import java.io.Serializable;
 @Entity
 @DiscriminatorValue("zaposleni_van_nastave")
 public class ZaposleniVanNastave extends User  {
-    @Column(name = "titula", nullable = false)
+    @Column(name = "titula", nullable = true)
     private String titula;
 }

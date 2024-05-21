@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -23,19 +24,29 @@ public class Rezervacija {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "svrha", nullable = true)
+    private String svrha;
+
+    @Column(name = "razlogOdjave", nullable = true)
+    private String razlogOdjave;
+
     @Column(name = "vreme_datum", nullable = false)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime vremeDatum;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "sala_id", nullable = false)
-    private Sala sala;
+    @ManyToMany
+    @JoinTable(
+            name = "rezervacija_sala",
+            joinColumns = @JoinColumn(name = "rezervacija_id"),
+            inverseJoinColumns = @JoinColumn(name = "sala_id")
+    )
+    private List<Sala> sale;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "status_rezervacije_id", nullable = false)
     private StatusRezervacije statusRezervacije;
 
-    @OneToOne(optional = false, orphanRemoval = true)
+    @OneToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

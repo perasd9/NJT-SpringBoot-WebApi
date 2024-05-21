@@ -37,15 +37,46 @@ public class RezervacijaController {
     public ResponseEntity<List<Rezervacija>> getAllReservations(@RequestParam String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime datum = LocalDateTime.parse(date, formatter);
-                
+
         List<Rezervacija> lista = rezervacijaService.getAllByDate(datum);
 
         return ResponseEntity.ok(lista);
     }
 
-    @PostMapping
-    public ResponseEntity addReservation(@RequestBody Rezervacija rezervacija) {
-        return rezervacijaService.save(rezervacija) ? ResponseEntity.ok().build()
+    @GetMapping("/naCekanju")
+    public ResponseEntity<List<Rezervacija>> getAllReservationRequests() {
+        List<Rezervacija> lista = rezervacijaService.getAllByStatusRezervacije("Na cekanju");
+
+        return ResponseEntity.ok(lista);
+    }
+
+    @PostMapping("/kreiraj")
+    public ResponseEntity addReservationRequest(@RequestBody Rezervacija rezervacija) {
+        return rezervacijaService.saveRequest(rezervacija) ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/prihvati")
+    public ResponseEntity acceptReservationRequest(@RequestBody Rezervacija rezervacija) {
+        return rezervacijaService.acceptRequest(rezervacija) ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/odbij")
+    public ResponseEntity denyReservationRequest(@RequestBody Rezervacija rezervacija) {
+        return rezervacijaService.denyRequest(rezervacija) ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/odjavi")
+    public ResponseEntity closeReservation(@RequestBody Rezervacija rezervacija) {
+        return rezervacijaService.closeReservation(rezervacija) ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping()
+    public ResponseEntity updateReservation(@RequestBody Rezervacija rezervacija) {
+        return rezervacijaService.update(rezervacija) ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
 }

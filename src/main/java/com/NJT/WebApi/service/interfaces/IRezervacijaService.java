@@ -15,5 +15,9 @@ import java.util.List;
  */
 public interface IRezervacijaService extends IService<Rezervacija>{
     public List<Rezervacija> getAllByDate(LocalDateTime date);
-    
+    public List<Rezervacija> getAllByStatusRezervacije(String status);
+    public boolean saveRequest(Rezervacija entity);
+    public boolean acceptRequest(Rezervacija entity);
+    public boolean denyRequest(Rezervacija entity);
+    public boolean closeReservation(Rezervacija entity);
 }

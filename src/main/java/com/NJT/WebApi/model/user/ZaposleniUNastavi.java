@@ -12,14 +12,14 @@ import java.io.Serializable;
 @Entity
 @DiscriminatorValue("zaposleni_u_nastavi")
 public class ZaposleniUNastavi extends User {
-    @Column(name = "zvanje", nullable = false)
+    @Column(name = "zvanje", nullable = true)
     private String zvanje;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "katedra_id", nullable = false)
     private Katedra katedra;
 
-    @Column(name = "titula", nullable = false)
+    @Column(name = "titula", nullable = true)
     private String titula;
 
 }

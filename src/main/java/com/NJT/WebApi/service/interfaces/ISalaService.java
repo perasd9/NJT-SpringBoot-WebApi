@@ -5,11 +5,13 @@
 package com.NJT.WebApi.service.interfaces;
 
 import com.NJT.WebApi.model.Sala;
+import java.util.List;
 
 /**
  *
  * @author Pera
  */
 public interface ISalaService extends IService<Sala>{
-    
+    public List<Sala> getAllActive();
+    public List<Sala> getAllByName(String naziv);
 }
