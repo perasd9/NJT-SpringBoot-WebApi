@@ -41,7 +41,6 @@ public class User implements Serializable {
     private String imePrezime;
 
     @Column(name = "password", nullable = false)
-    @JsonIgnore
     private String password;
 
     @Column(name = "odobren", nullable = false)
@@ -59,5 +58,8 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<VerificationToken> verificationTokens = new ArrayList<>();
+
+    @Column(nullable = false)
+    private String role = "USER";
 
 }
