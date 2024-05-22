@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,8 +42,8 @@ public class UserService {
             EmailService emailService,
             VerificationTokenRepository verificationTokenRepository) {
         this.studentRepository = studentRepository;
-        this.zaposleniVanNastaveRepository=zaposleniVanNastaveRepository;
-        this.zaposleniUNastaviRepository=zaposleniUNastaviRepository;
+        this.zaposleniVanNastaveRepository = zaposleniVanNastaveRepository;
+        this.zaposleniUNastaviRepository = zaposleniUNastaviRepository;
         this.userRepository = userRepository;
         this.encryptionService = encryptionService;
         this.jwtService = jwtService;
@@ -51,7 +52,7 @@ public class UserService {
     }
 
     public void registerUser(User user) throws RegistrationException, EmailFailureException {
-        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RegistrationException("Email already exists");
         }
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
@@ -62,6 +63,10 @@ public class UserService {
 
         upisiUBazu(user);
 
+    }
+
+    public User getById(Long id) {
+        return userRepository.findById(id).get();
     }
 
     public VerificationToken createVerificationToken(User user) throws EmailFailureException {
@@ -80,19 +85,19 @@ public class UserService {
         } else if (user instanceof ZaposleniUNastavi) {
             zaposleniUNastaviRepository.save((ZaposleniUNastavi) user);
         } else if (user instanceof Student) {
-            studentRepository.save((Student)user);
-        }else {
+            studentRepository.save((Student) user);
+        } else {
             throw new RegistrationException("Invalid user type");
         }
     }
 
     @Transactional
-    public boolean verifyUser(String token){
+    public boolean verifyUser(String token) {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
-        if(verificationToken.isPresent()){
+        if (verificationToken.isPresent()) {
             VerificationToken verificationToken1 = verificationToken.get();
             User user = verificationToken1.getUser();
-            if(!user.getPotvrdjenMail()){
+            if (!user.getPotvrdjenMail()) {
                 user.setPotvrdjenMail(true);
                 userRepository.save(user);
                 verificationTokenRepository.deleteByUser(user);
@@ -106,24 +111,30 @@ public class UserService {
 
         Optional<User> opUser = userRepository.findByUsername(loginBody.getUsername());
         LoginResponse loginResponse;
-        if(opUser.isPresent()){
+        if (opUser.isPresent()) {
             User user = opUser.get();
-            if(encryptionService.checkPassword(loginBody.getPassword(), user.getPassword())){
-                if(user.getPotvrdjenMail()){
-                    if(user.getOdobren()){
+            if (encryptionService.checkPassword(loginBody.getPassword(), user.getPassword())) {
+                if (user.getPotvrdjenMail()) {
+                    if (user.getOdobren()) {
                         //return jwtService.createToken(user); //stari kod, ne radimo ovako vise
-                        loginResponse  = new LoginResponse();
+                        loginResponse = new LoginResponse();
                         loginResponse.setUser(user);
                         loginResponse.setJwt(jwtService.createToken(user));
                         return loginResponse;
-                    }else {
+                    } else {
                         throw new LoginException("Profil jos uvek nije odobren!");
                     }
-                }else {
+                } else {
                     throw new LoginException("Nije verifikovana email adresa!");
                 }
             }
         }
         return null;
+    }
+
+    public List<User> getAllByOdobren(String odobren) {
+        boolean odobrenBool = Boolean.parseBoolean(odobren);
+        
+        return (List<User>) userRepository.findAllByOdobren(odobrenBool);
     }
 }
