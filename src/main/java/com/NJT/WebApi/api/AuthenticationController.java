@@ -1,5 +1,6 @@
 package com.NJT.WebApi.api;
 
+import com.NJT.WebApi.model.auth.RegistrationBody;
 import com.NJT.WebApi.model.exception.EmailFailureException;
 import com.NJT.WebApi.model.exception.RegistrationException;
 import com.NJT.WebApi.model.exception.LoginException;
@@ -25,6 +26,7 @@ public class AuthenticationController {
         this.user = user;
     }
 
+    /*
     @PostMapping("/register")
     public ResponseEntity registerUser(@RequestBody User user) {
 
@@ -36,7 +38,22 @@ public class AuthenticationController {
         } catch (EmailFailureException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error with email sending... ");
         }
+    }*/
+
+    @PostMapping("/register")
+    public ResponseEntity registerUser(@RequestBody RegistrationBody registrationBody) {
+
+        try {
+            userService.registerUser(registrationBody);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (RegistrationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (EmailFailureException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error with email sending... ");
+        }
     }
+
+
 
     @PostMapping("/verify")
     public ResponseEntity verifyEmail(@RequestParam String token){

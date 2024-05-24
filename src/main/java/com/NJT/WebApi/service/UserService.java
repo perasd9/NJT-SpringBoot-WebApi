@@ -1,6 +1,7 @@
 package com.NJT.WebApi.service;
 
 import com.NJT.WebApi.model.auth.LoginResponse;
+import com.NJT.WebApi.model.auth.RegistrationBody;
 import com.NJT.WebApi.model.exception.EmailFailureException;
 import com.NJT.WebApi.model.exception.RegistrationException;
 import com.NJT.WebApi.model.exception.LoginException;
@@ -51,18 +52,29 @@ public class UserService {
         this.verificationTokenRepository = verificationTokenRepository;
     }
 
-    public void registerUser(User user) throws RegistrationException, EmailFailureException {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RegistrationException("Email already exists");
+
+    public void registerUser(RegistrationBody registrationBody) throws RegistrationException, EmailFailureException {
+
+        Optional<User> opUser = userRepository.findByEmail(registrationBody.getEmail());
+        User user;
+        if (!opUser.isPresent()) {
+            throw new RegistrationException("Email doesn't exist in the system. Please contact administrator.");
+        }else{
+            user=opUser.get();
         }
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new RegistrationException("Username already exists");
+
+        if (user.getUsername()!=null) {
+            throw new RegistrationException("User already registered. Please login.");
         }
-        user.setPassword(encryptionService.encryptPassword(user.getPassword()));
+        if(userRepository.findByUsername(registrationBody.getUsername()).isPresent()){
+            throw new RegistrationException("Username already exists in the system. Change username.");
+        }
+
+        user.setPassword(encryptionService.encryptPassword(registrationBody.getPassword()));
+        user.setUsername(registrationBody.getUsername());
         VerificationToken verificationToken = createVerificationToken(user);
 
         upisiUBazu(user);
-
     }
 
     public User getById(Long id) {
