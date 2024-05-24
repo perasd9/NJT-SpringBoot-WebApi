@@ -4,6 +4,7 @@
  */
 package com.NJT.WebApi.config;
 
+import com.NJT.WebApi.model.user.User;
 import jakarta.persistence.Entity;
 import java.security.Principal;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -51,18 +53,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registration.addDecoratorFactory((delegate) -> new WebSocketHandlerDecorator(delegate) {
             @Override
             public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+                String query = session.getUri().getQuery();
                 String sessionId = session.getId();
                 String username = session.getPrincipal() != null ? session.getPrincipal().getName() : "";
-                String roleCookie = session.getHandshakeHeaders().getFirst("cookie");
                 String role = "";
-                if(roleCookie != null){
-                    if (roleCookie.contains("ADMIN")) {
+                if(query != null){
+                    if (query.contains("ADMIN")) {
                     role = "ADMIN";
-                } else if (roleCookie.contains("USER")) {
+                } else if (query.contains("USER")) {
                     role = "USER";
                 }
                 }
-
+                
                 SessionInfo sessionInfo = new SessionInfo(sessionId, username, role);
                 activeSessions.put(sessionId, sessionInfo);
 

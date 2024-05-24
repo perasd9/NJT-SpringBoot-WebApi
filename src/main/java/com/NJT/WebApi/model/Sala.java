@@ -52,4 +52,9 @@ public class Sala {
     @JsonIgnore
     private Long statusSaleId;
 
+    @Override
+    public String toString() {
+        return naziv;
+    }
+    
 }

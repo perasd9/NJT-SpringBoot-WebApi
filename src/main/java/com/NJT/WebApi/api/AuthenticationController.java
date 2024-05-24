@@ -66,7 +66,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginBody loginBody){
-        LoginResponse response = null;
+        LoginResponse response = new LoginResponse();
         try {
             response = userService.loginUser(loginBody);
         } catch (LoginException e) {

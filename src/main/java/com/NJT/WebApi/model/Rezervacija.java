@@ -53,4 +53,11 @@ public class Rezervacija {
     public Rezervacija() {
 
     }
+
+    @Override
+    public String toString() {
+        return "Rezervacija datuma: " + vremeDatum.toString()+ " za sale: "+ sale.toString();
+    }
+    
+    
 }

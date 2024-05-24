@@ -31,7 +31,7 @@ public class EmailService {
 
     private SimpleMailMessage makeMailMessage(){
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(fromEmail);;
+        message.setFrom(fromEmail);
         return message;
     }
 
@@ -44,33 +44,24 @@ public class EmailService {
         try{
             javaMailSender.send(message);
         }catch(MailException e){
-            throw new EmailFailureException();
+            throw new EmailFailureException(e.getMessage());
         }
     }
 
-    public void posaljiMailZaRezervaciju() throws EmailFailureException {
+    public void posaljiMailZaRezervaciju(String subject, String text, String email) throws EmailFailureException {
 
         SimpleMailMessage message = makeMailMessage();
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        message.setTo(user.getEmail());
+        //User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //message.setTo(user.getEmail());
 
-        message.setSubject("Uspesno kreirana rezervacija");
-        message.setText(
-                "\n\n" +
-                "Uspesno ste kreirali rezervaciju! " +
-                "\n\n-----------------------------------------------------------\n\n " +
-                "Detalji rezervacije: \n\n" +
-               // rezervacija.toString() + "\n\n " +
-                "Srdacno,\n " +
-                "NjtApp2024");
+        message.setTo(email);
+        
+        message.setSubject(subject);
+        message.setText(text);
         try{
             javaMailSender.send(message);
         }catch(MailException e){
-            throw new EmailFailureException();
+            throw new EmailFailureException(e.getMessage());
         }
-
-
-
     }
-
 }

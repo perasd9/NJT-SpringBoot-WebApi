@@ -5,6 +5,7 @@
 package com.NJT.WebApi.service;
 
 import com.NJT.WebApi.model.Rezervacija;
+import com.NJT.WebApi.model.exception.EmailFailureException;
 import com.NJT.WebApi.repository.RezervacijaRepository;
 import com.NJT.WebApi.repository.StatusRezervacijeRepository;
 import com.NJT.WebApi.service.interfaces.IRezervacijaService;
@@ -13,6 +14,8 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
@@ -27,11 +30,14 @@ public class RezervacijaService implements IRezervacijaService {
 
     private RezervacijaRepository repository;
     private StatusRezervacijeRepository statusRezervacijeRepository;
+    private EmailService emailService;
 
     @Autowired
-    public RezervacijaService(RezervacijaRepository repository, StatusRezervacijeRepository statusRezervacijeRepository) {
+    public RezervacijaService(RezervacijaRepository repository,
+            StatusRezervacijeRepository statusRezervacijeRepository, EmailService emailService) {
         this.repository = repository;
         this.statusRezervacijeRepository = statusRezervacijeRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -59,7 +65,7 @@ public class RezervacijaService implements IRezervacijaService {
     public boolean save(Rezervacija rezervacija) {
 
         Rezervacija r = repository.save(rezervacija);
-        
+
         return r != null;
 
     }
@@ -70,6 +76,17 @@ public class RezervacijaService implements IRezervacijaService {
         entity.setStatusRezervacije(statusRezervacijeRepository.findBystatus("Na cekanju"));
 
         Rezervacija rez = repository.save(entity);
+
+        try {
+            emailService.posaljiMailZaRezervaciju("Zahtev za rezervaciju",
+                    "\n\n"
+                    + "Uspesno ste poslali zahtev za rezervaciju! "
+                    + "\n\n-----------------------------------------------------------\n\n "
+                    + "Srdacno,\n "
+                    + "NjtApp2024", rez.getUser().getEmail());
+        } catch (EmailFailureException ex) {
+            Logger.getLogger(RezervacijaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         return rez != null;
     }
@@ -83,6 +100,19 @@ public class RezervacijaService implements IRezervacijaService {
             rez.setStatusRezervacije(statusRezervacijeRepository.findBystatus("Odobrena"));
 
             repository.save(rez);
+
+            try {
+                emailService.posaljiMailZaRezervaciju("Prihvacen zahtev za rezervaciju",
+                        "\n\n"
+                        + "Vas zahtev za rezervaciju je prihvacen! "
+                        + "\n\n-----------------------------------------------------------\n\n "
+                        + "Detalji rezervacije: \n\n"
+                        + rez.toString() + "\n\n "
+                        + "Srdacno,\n "
+                        + "NjtApp2024", rez.getUser().getEmail());
+            } catch (EmailFailureException ex) {
+                Logger.getLogger(RezervacijaService.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }
             return true;
         }
 
@@ -98,6 +128,19 @@ public class RezervacijaService implements IRezervacijaService {
             rez.setStatusRezervacije(statusRezervacijeRepository.findBystatus("Odbijena"));
 
             repository.save(rez);
+
+            try {
+                emailService.posaljiMailZaRezervaciju("Odbijen zahtev za rezervaciju",
+                        "\n\n"
+                        + "Vas zahtev za rezervaciju je odbijen! "
+                        + "\n\n-----------------------------------------------------------\n\n "
+                        + "Detalji rezervacije: \n\n"
+                        + rez.toString() + "\n\n "
+                        + "Srdacno,\n "
+                        + "NjtApp2024", rez.getUser().getEmail());
+            } catch (EmailFailureException ex) {
+                Logger.getLogger(RezervacijaService.class.getName()).log(Level.SEVERE, null, ex);
+            }
             return true;
         }
 
@@ -116,6 +159,18 @@ public class RezervacijaService implements IRezervacijaService {
                 return false;
             }
             repository.save(rez);
+            try {
+                emailService.posaljiMailZaRezervaciju("Otkazivanje rezervacije",
+                        "\n\n"
+                        + "Vasa rezervacija je otkazana! "
+                        + "\n\n-----------------------------------------------------------\n\n "
+                        + "Detalji rezervacije: \n\n"
+                        + rez.toString() + "\n\n "
+                        + "Srdacno,\n "
+                        + "NjtApp2024", rez.getUser().getEmail());
+            } catch (EmailFailureException ex) {
+                Logger.getLogger(RezervacijaService.class.getName()).log(Level.SEVERE, null, ex);
+            }
             return true;
         }
 
@@ -134,6 +189,19 @@ public class RezervacijaService implements IRezervacijaService {
             rez.setVremeDatum(entity.getVremeDatum());
 
             repository.save(rez);
+
+            try {
+                emailService.posaljiMailZaRezervaciju("Promena rezervacije",
+                        "\n\n"
+                        + "Vasa rezervacija je promenjena! "
+                        + "\n\n-----------------------------------------------------------\n\n "
+                        + "Detalji rezervacije: \n\n"
+                        + rez.toString() + "\n\n "
+                        + "Srdacno,\n "
+                        + "NjtApp2024", rez.getUser().getEmail());
+            } catch (EmailFailureException ex) {
+                Logger.getLogger(RezervacijaService.class.getName()).log(Level.SEVERE, null, ex);
+            }
             return true;
         }
 
