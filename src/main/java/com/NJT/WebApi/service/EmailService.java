@@ -1,18 +1,22 @@
 package com.NJT.WebApi.service;
 
+import com.NJT.WebApi.model.Rezervacija;
 import com.NJT.WebApi.model.exception.EmailFailureException;
 import com.NJT.WebApi.model.VerificationToken;
+import com.NJT.WebApi.model.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
+
     @Value("${email.from}")
-    private String from;
+    private String fromEmail;
 
     @Value("${app.frontend.url}")
     private String frontendUrl;
@@ -27,7 +31,7 @@ public class EmailService {
 
     private SimpleMailMessage makeMailMessage(){
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(from);;
+        message.setFrom(fromEmail);;
         return message;
     }
 
@@ -43,4 +47,30 @@ public class EmailService {
             throw new EmailFailureException();
         }
     }
+
+    public void posaljiMailZaRezervaciju() throws EmailFailureException {
+
+        SimpleMailMessage message = makeMailMessage();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        message.setTo(user.getEmail());
+
+        message.setSubject("Uspesno kreirana rezervacija");
+        message.setText(
+                "\n\n" +
+                "Uspesno ste kreirali rezervaciju! " +
+                "\n\n-----------------------------------------------------------\n\n " +
+                "Detalji rezervacije: \n\n" +
+               // rezervacija.toString() + "\n\n " +
+                "Srdacno,\n " +
+                "NjtApp2024");
+        try{
+            javaMailSender.send(message);
+        }catch(MailException e){
+            throw new EmailFailureException();
+        }
+
+
+
+    }
+
 }
