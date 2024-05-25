@@ -55,7 +55,7 @@ public class AuthenticationController {
 
 
 
-    @PostMapping("/verify")
+    @GetMapping("/verify")
     public ResponseEntity verifyEmail(@RequestParam String token){
         if(userService.verifyUser(token)){
             return ResponseEntity.status(HttpStatus.OK).body("Uspesno potvrdjena mail adresa.");

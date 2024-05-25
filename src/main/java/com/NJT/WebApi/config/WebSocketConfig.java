@@ -54,6 +54,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public void afterConnectionEstablished(WebSocketSession session) throws Exception {
                 String query = session.getUri().getQuery();
+                
                 String sessionId = session.getId();
                 String username = session.getPrincipal() != null ? session.getPrincipal().getName() : "";
                 String role = "";
