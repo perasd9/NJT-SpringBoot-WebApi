@@ -6,6 +6,7 @@ import com.NJT.WebApi.model.exception.EmailFailureException;
 import com.NJT.WebApi.model.exception.RegistrationException;
 import com.NJT.WebApi.model.exception.LoginException;
 import com.NJT.WebApi.model.VerificationToken;
+import com.NJT.WebApi.model.auth.ChangePasswordBody;
 import com.NJT.WebApi.model.auth.LoginBody;
 import com.NJT.WebApi.model.user.Student;
 import com.NJT.WebApi.model.user.User;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class UserService {
@@ -52,21 +55,20 @@ public class UserService {
         this.verificationTokenRepository = verificationTokenRepository;
     }
 
-
     public void registerUser(RegistrationBody registrationBody) throws RegistrationException, EmailFailureException {
 
         Optional<User> opUser = userRepository.findByEmail(registrationBody.getEmail());
         User user;
         if (!opUser.isPresent()) {
             throw new RegistrationException("Email doesn't exist in the system. Please contact administrator.");
-        }else{
-            user=opUser.get();
+        } else {
+            user = opUser.get();
         }
 
-        if (user.getUsername()!=null) {
+        if (user.getUsername() != null) {
             throw new RegistrationException("User already registered. Please login.");
         }
-        if(userRepository.findByUsername(registrationBody.getUsername()).isPresent()){
+        if (userRepository.findByUsername(registrationBody.getUsername()).isPresent()) {
             throw new RegistrationException("Username already exists in the system. Change username.");
         }
 
@@ -146,7 +148,66 @@ public class UserService {
 
     public List<User> getAllByOdobren(String odobren) {
         boolean odobrenBool = Boolean.parseBoolean(odobren);
-        
+
         return (List<User>) userRepository.findAllByOdobren(odobrenBool);
+    }
+
+    public boolean acceptUserRegistration(User user) {
+        Optional<User> userOpt = userRepository.findById(user.getId());
+
+        if (userOpt.isPresent()) {
+            User userDb = userOpt.get();
+            userDb.setOdobren(true);
+            userDb.setRole(user.getRole());
+
+            userRepository.save(userDb);
+
+            try {
+                emailService.posaljiMailZaRezervaciju("Prihvacen zahtev za registraciju",
+                        "\n\n"
+                        + "Vas zahtev za registraciju je prihvacen! "
+                        + "\n\n-----------------------------------------------------------\n\n "
+                        + "Srdacno,\n "
+                        + "NjtApp2024", user.getEmail());
+            } catch (EmailFailureException ex) {
+                Logger.getLogger(RezervacijaService.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean changePassword(ChangePasswordBody changePassword) {
+        Optional<User> userOpt = userRepository.findById(changePassword.getId());
+
+        if (userOpt.isPresent()) {
+            User userDb = userOpt.get();
+
+            if (encryptionService.checkPassword(changePassword.getCurrentPassword(), userDb.getPassword())) {
+                userDb.setPassword(encryptionService.encryptPassword(changePassword.getNewPassword()));
+            }
+
+            userRepository.save(userDb);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean denyUserRegistration(Long id) {
+        Optional<User> userOpt = userRepository.findById(id);
+
+        if (userOpt.isPresent()) {
+            User userDb = userOpt.get();
+            userDb.setRole("/");
+            
+            userRepository.save(userDb);
+
+            return true;
+        }
+
+        return false;
     }
 }

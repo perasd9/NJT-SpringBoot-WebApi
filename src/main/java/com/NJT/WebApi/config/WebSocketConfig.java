@@ -75,6 +75,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
                 activeSessions.remove(session.getId());
+                System.out.println("BROJ SESIJA on closed "+ activeSessions.size());
                 super.afterConnectionClosed(session, closeStatus);
             }
         });

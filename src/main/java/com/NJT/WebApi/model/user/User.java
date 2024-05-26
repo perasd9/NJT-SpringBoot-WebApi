@@ -60,6 +60,6 @@ public class User implements Serializable {
     private List<VerificationToken> verificationTokens = new ArrayList<>();
 
     @Column(nullable = false)
-    private String role = "USER";
+    private String role;
 
 }

@@ -12,6 +12,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
     
-    @Query("SELECT u FROM User u WHERE u.odobren = :odobren")
+    @Query("SELECT u FROM User u WHERE u.odobren = :odobren AND u.role = '' AND u.potvrdjenMail = true")
     List<User> findAllByOdobren(boolean odobren);
 }
