@@ -22,11 +22,11 @@ public class EmailService {
     private String frontendUrl;
 
 
-    private JavaMailSender javaMailSender;
+    private MailQueue mailQueue;
 
     @Autowired
-    public EmailService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
+    public EmailService(MailQueue mailQueue) {
+        this.mailQueue = mailQueue;
     }
 
     private SimpleMailMessage makeMailMessage(){
@@ -41,11 +41,7 @@ public class EmailService {
         message.setSubject("Verifikuj mail adresu za nalog.");
         message.setText("Klikni link ispod da verifikujes nalog\n" +
                 frontendUrl+ "/auth/verify?token=" + verificationToken.getToken());
-        try{
-            javaMailSender.send(message);
-        }catch(MailException e){
-            throw new EmailFailureException(e.getMessage());
-        }
+        mailQueue.addToQueue(message);
     }
 
     public void posaljiMailZaRezervaciju(String subject, String text, String email) throws EmailFailureException {
@@ -58,10 +54,6 @@ public class EmailService {
         
         message.setSubject(subject);
         message.setText(text);
-        try{
-            javaMailSender.send(message);
-        }catch(MailException e){
-            throw new EmailFailureException(e.getMessage());
-        }
+        mailQueue.addToQueue(message);
     }
 }
