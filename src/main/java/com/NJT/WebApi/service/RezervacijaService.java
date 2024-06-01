@@ -126,6 +126,7 @@ public class RezervacijaService implements IRezervacijaService {
         if (rezOpt.isPresent()) {
             Rezervacija rez = rezOpt.get();
             rez.setStatusRezervacije(statusRezervacijeRepository.findBystatus("Odbijena"));
+            rez.setRazlogOdjave(entity.getRazlogOdjave());
 
             repository.save(rez);
 
@@ -153,8 +154,9 @@ public class RezervacijaService implements IRezervacijaService {
 
         if (rezOpt.isPresent()) {
             Rezervacija rez = rezOpt.get();
-            if (!rez.getStatusRezervacije().getStatus().equals("Na cekanju")) {
+            if (!rez.getStatusRezervacije().getStatus().equals("Odbijena")) {
                 rez.setStatusRezervacije(statusRezervacijeRepository.findBystatus("Odbijena"));
+                rez.setRazlogOdjave(entity.getRazlogOdjave());
             } else {
                 return false;
             }

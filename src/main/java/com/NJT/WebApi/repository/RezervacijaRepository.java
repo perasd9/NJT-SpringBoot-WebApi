@@ -22,9 +22,10 @@ import org.springframework.stereotype.Repository;
 public interface RezervacijaRepository extends CrudRepository<Rezervacija, Long> {
 
     @Query("SELECT r FROM Rezervacija r WHERE YEAR(r.vremeDatum) = YEAR(:date) AND MONTH(r.vremeDatum) "
-            + "= MONTH(:date) AND DAY(r.vremeDatum) = DAY(:date) AND r.statusRezervacije.status = 'Odobrena'")
+            + "= MONTH(:date) AND DAY(r.vremeDatum) = DAY(:date) AND r.statusRezervacije.status != 'Odbijena' "
+            + "ORDER BY r.vremeDatum")
     public List<Rezervacija> findByVremeDatum(@Param("date") LocalDateTime date);
 
-    @Query("SELECT r FROM Rezervacija r WHERE r.statusRezervacije.status = :status")
+    @Query("SELECT r FROM Rezervacija r WHERE r.statusRezervacije.status = :status ORDER BY r.vremeDatum")
     public List<Rezervacija> findByStatusRezervacije(@Param("status") String status);
 }

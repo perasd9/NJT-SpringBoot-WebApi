@@ -5,7 +5,9 @@
 package com.NJT.WebApi.api;
 
 import com.NJT.WebApi.service.NotificationService;
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +28,11 @@ public class NotificationController {
     }
 
     @GetMapping("/sendNotification")
-    public String sendNotification() {
-            notificationService.sendNotificationToAdmins();
-        return "Obavestenje poslato!";
+    public ResponseEntity sendNotification() {
+        notificationService.sendNotificationToAdmins();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("message", "Obavestenje poslato!");
+        
+        return ResponseEntity.ok(map);
     }
 }

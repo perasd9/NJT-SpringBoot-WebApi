@@ -23,6 +23,9 @@ public class CustomHandshakeHandler extends DefaultHandshakeHandler {
             WebSocketHandler wsHandler,
             Map<String, Object> attributes
     ) {
-        return new StompPrincipal(UUID.randomUUID().toString());
+        String userCredential = UUID.randomUUID().toString();
+        StompPrincipal userPrincipal = new StompPrincipal(userCredential);
+        
+        return userPrincipal;
     }
 }
