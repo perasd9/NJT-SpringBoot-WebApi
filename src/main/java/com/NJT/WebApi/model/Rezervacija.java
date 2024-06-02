@@ -1,5 +1,6 @@
 package com.NJT.WebApi.model;
 
+import com.NJT.WebApi.model.svrha.Svrha;
 import com.NJT.WebApi.model.user.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -24,8 +25,14 @@ public class Rezervacija {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    /*
     @Column(name = "svrha", nullable = true)
     private String svrha;
+    */
+
+    @OneToOne(optional = false, orphanRemoval = true)
+    @JoinColumn(name = "svrha_id", nullable = false)
+    private Svrha svrha;
 
     @Column(name = "razlogOdjave", nullable = true)
     private String razlogOdjave;
