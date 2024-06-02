@@ -40,7 +40,7 @@ public class TipSaleService implements ITipSaleService{
     //NOT IMPLEMENTED YET
     @Override
     public boolean save(TipSale entity) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+            throw new UnsupportedOperationException("Not supported yet.");
     }
 
     //NOT IMPLEMENTED YET

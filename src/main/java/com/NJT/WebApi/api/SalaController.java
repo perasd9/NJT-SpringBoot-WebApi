@@ -6,7 +6,11 @@ package com.NJT.WebApi.api;
 
 import com.NJT.WebApi.model.Sala;
 import com.NJT.WebApi.service.interfaces.ISalaService;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,22 +64,42 @@ public class SalaController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ResponseEntity save(@RequestBody Sala sala) {
-        return salaService.save(sala) ? (ResponseEntity) ResponseEntity.ok().build()
-                : (ResponseEntity) ResponseEntity.badRequest().build();
+        Map<String, String> response = new HashMap<>();
+
+        if(salaService.save(sala)){
+            response.put("message", "Uspesno sacuvana sala.");
+            return new ResponseEntity(response, HttpStatus.OK);
+        }else{
+            response.put("message", "Greska prilikom cuvanja sale!");
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping
     public ResponseEntity update(@RequestBody Sala sala) {
-        return salaService.update(sala) ? (ResponseEntity) ResponseEntity.ok().build()
-                : (ResponseEntity) ResponseEntity.badRequest().build();
+        Map<String, String> response = new HashMap<>();
+
+        if(salaService.update(sala)){
+            response.put("message", "Uspesno azurirana sala.");
+            return new ResponseEntity(response, HttpStatus.OK);
+        }else{
+            response.put("message", "Greska prilikom azuriranja sale!");
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping
     public ResponseEntity delete(@RequestBody Long id) {
-        salaService.delete(id);
+        Map<String, String> response = new HashMap<>();
 
-        return (ResponseEntity) ResponseEntity.ok().build();
+        if(salaService.delete(id)){
+            response.put("message", "Sala sa ID-jem "+id+" je postavljena kao neaktivna.");
+            return new ResponseEntity(response, HttpStatus.OK);
+        }else{
+            response.put("message", "Greska prilikom deaktiviranja sale sa ID-jem: "+id);
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

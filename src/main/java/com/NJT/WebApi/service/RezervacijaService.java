@@ -11,15 +11,18 @@ import com.NJT.WebApi.repository.StatusRezervacijeRepository;
 import com.NJT.WebApi.service.interfaces.IRezervacijaService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import org.springframework.http.ResponseEntity;
+
 
 /**
  *
@@ -92,8 +95,9 @@ public class RezervacijaService implements IRezervacijaService {
     }
 
     @Override
-    public boolean acceptRequest(Rezervacija entity) {
+    public ResponseEntity acceptRequest(Rezervacija entity) {
         Optional<Rezervacija> rezOpt = repository.findById(entity.getId());
+        Map<String, String> response = new HashMap<>();
 
         if (rezOpt.isPresent()) {
             Rezervacija rez = rezOpt.get();
@@ -113,15 +117,18 @@ public class RezervacijaService implements IRezervacijaService {
             } catch (EmailFailureException ex) {
                 Logger.getLogger(RezervacijaService.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
             }
-            return true;
-        }
 
-        return false;
+            response.put("message", "Uspesno prihvacena rezervacija.");
+            return new ResponseEntity(response, HttpStatus.OK);
+        }
+        response.put("message", "Greska prilikom prihvatanja rezervacije!");
+        return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
-    public boolean denyRequest(Rezervacija entity) {
+    public ResponseEntity denyRequest(Rezervacija entity) {
         Optional<Rezervacija> rezOpt = repository.findById(entity.getId());
+        Map<String, String> response = new HashMap<>();
 
         if (rezOpt.isPresent()) {
             Rezervacija rez = rezOpt.get();
@@ -142,15 +149,19 @@ public class RezervacijaService implements IRezervacijaService {
             } catch (EmailFailureException ex) {
                 Logger.getLogger(RezervacijaService.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return true;
+            response.put("message", "Uspesno odbijena rezervacija.");
+            return new ResponseEntity(response, HttpStatus.OK);
         }
 
-        return false;
+        response.put("message", "Greska prilikom odbijanja rezervacije!");
+        return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
-    public boolean closeReservation(Rezervacija entity) {
+    public ResponseEntity closeReservation(Rezervacija entity) {
         Optional<Rezervacija> rezOpt = repository.findById(entity.getId());
+        Map<String, String> response = new HashMap<>();
+
 
         if (rezOpt.isPresent()) {
             Rezervacija rez = rezOpt.get();
@@ -158,7 +169,8 @@ public class RezervacijaService implements IRezervacijaService {
                 rez.setStatusRezervacije(statusRezervacijeRepository.findBystatus("Odbijena"));
                 rez.setRazlogOdjave(entity.getRazlogOdjave());
             } else {
-                return false;
+                response.put("message", "Greska prilikom objavljivanja rezervacije!");
+                return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
             repository.save(rez);
             try {
@@ -173,10 +185,12 @@ public class RezervacijaService implements IRezervacijaService {
             } catch (EmailFailureException ex) {
                 Logger.getLogger(RezervacijaService.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return true;
+            response.put("message", "Uspesno odjavljena rezervacija.");
+            return new ResponseEntity(response, HttpStatus.OK);
         }
 
-        return false;
+        response.put("message", "Greska prilikom odjavljivanja rezervacije!");
+        return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

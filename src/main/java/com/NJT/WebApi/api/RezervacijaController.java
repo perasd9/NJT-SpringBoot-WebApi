@@ -12,8 +12,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -52,31 +57,39 @@ public class RezervacijaController {
 
     @PostMapping("/kreiraj")
     public ResponseEntity addReservationRequest(@RequestBody Rezervacija rezervacija) {
-        return rezervacijaService.saveRequest(rezervacija) ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        return rezervacijaService.saveRequest(rezervacija) ?
+                ResponseEntity.ok().body("Uspesno kreirana rezervacija.") :
+                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Greska prilikom dodavanja rezervacije!");
+
+
     }
 
     @PostMapping("/prihvati")
     public ResponseEntity acceptReservationRequest(@RequestBody Rezervacija rezervacija) {
-        return rezervacijaService.acceptRequest(rezervacija) ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        return rezervacijaService.acceptRequest(rezervacija);
     }
 
     @PostMapping("/odbij")
     public ResponseEntity denyReservationRequest(@RequestBody Rezervacija rezervacija) {
-        return rezervacijaService.denyRequest(rezervacija) ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        return rezervacijaService.denyRequest(rezervacija);
     }
 
     @PostMapping("/odjavi")
     public ResponseEntity closeReservation(@RequestBody Rezervacija rezervacija) {
-        return rezervacijaService.closeReservation(rezervacija) ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        return rezervacijaService.closeReservation(rezervacija);
     }
 
     @PutMapping()
     public ResponseEntity updateReservation(@RequestBody Rezervacija rezervacija) {
-        return rezervacijaService.update(rezervacija) ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+
+        Map<String, String> response = new HashMap<>();
+
+        if(rezervacijaService.update(rezervacija)){
+            response.put("message", "Uspesno azurirana rezervacija.");
+            return new ResponseEntity(response, HttpStatus.OK);
+        }else{
+            response.put("message", "Greska prilikom azuriranja rezervacije!");
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

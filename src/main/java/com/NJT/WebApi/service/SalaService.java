@@ -13,6 +13,8 @@ import com.NJT.WebApi.repository.TipSaleRepository;
 import com.NJT.WebApi.service.interfaces.ISalaService;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +57,10 @@ public class SalaService implements ISalaService {
     }
 
     @Override
+    @Transactional
     public boolean save(Sala entity) {
-        Sala s = salaRepository.save(entity);
+        Sala s = null;
+        s = salaRepository.save(entity);
 
         return s != null;
     }
