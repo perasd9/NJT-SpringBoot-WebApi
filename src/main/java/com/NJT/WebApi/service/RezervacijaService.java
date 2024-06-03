@@ -201,7 +201,6 @@ public class RezervacijaService implements IRezervacijaService {
             Rezervacija rez = rezOpt.get();
             rez.setStatusRezervacije(statusRezervacijeRepository.findBystatus("Na cekanju"));
             rez.setSale(entity.getSale());
-            rez.setSvrha(entity.getSvrha());
             rez.setVremeDatum(entity.getVremeDatum());
 
             repository.save(rez);

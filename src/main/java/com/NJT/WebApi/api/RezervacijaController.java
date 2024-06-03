@@ -58,10 +58,10 @@ public class RezervacijaController {
     @PostMapping("/kreiraj")
     public ResponseEntity addReservationRequest(@RequestBody Rezervacija rezervacija) {
         return rezervacijaService.saveRequest(rezervacija) ?
-                ResponseEntity.ok().body("Uspesno kreirana rezervacija.") :
-                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Greska prilikom dodavanja rezervacije!");
-
-
+                ResponseEntity.ok()
+                        .body(Map.of("message", "Zahtev za rezervaciju uspesno obradjen")) :
+                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Map.of("message", "Greska prilikom dodavanja rezervacije!"));
     }
 
     @PostMapping("/prihvati")
